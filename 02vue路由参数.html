@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        var App = {
+            template: `
+                <div>
+                    <router-link :to="{name: 'userp', params: {id: 111111}}">用户1</router-link>
+                    <router-link :to="{name: 'userq', query: {userId: 222222}}">用户2</router-link>
+                    <router-view></router-view>
+                </div>
+            `
+        }
+
+        var UserParams = {
+            data(){
+                return {id: 0}
+            },
+            template: `<div>用户{{id}}</div>`,
+            created: function() {
+                // console.log(this.$route);
+                // console.log(this.$router);
+                this.id = this.$route.params.id
+                
+            }
+        }
+
+        var UserQuery = {
+            data(){
+                return {id: 0}
+            },
+            template: `<div>用户{{id}}</div>`,
+            created: function(e) {
+                this.id = this.$route.query.userId
+            }
+        }
+
+        var router = new VueRouter({
+            routes: [
+                {
+                    path: '/userp/:id',
+                    name: "userp",
+                    component: UserParams
+                },
+                {
+                    path: '/userq',
+                    name: "userq",
+                    component: UserQuery
+                }
+            ]
+        })
+
+        new Vue({
+            el: "#app",
+            data(){
+                return {}
+            },
+            router,
+            components: {
+                App
+            },
+            template: `<App />`
+        })
+    </script>
+</body>
+</html>

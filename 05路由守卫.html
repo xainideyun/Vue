@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+
+<body>
+
+    <div id="app">
+        <router-link to="/home">首页</router-link>
+        <router-link to="/study">学习</router-link>
+        <router-link to="/login">登录</router-link>
+        <!-- <router-link to="/outlog">退出</router-link> -->
+
+        <router-view></router-view>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+
+        var Home = {
+            template: `
+                <div>
+                    我是首页
+                </div>
+            `
+        }
+        var Study = {
+            template: `
+                <div>
+                    我是学习网
+                </div>
+            `
+        }
+        var Login = {
+            data(){
+                return {
+                    name: '',
+                    pwd: ''
+                }
+            },
+            template: `
+                <div>
+                    <input type="text" v-model="name" /> <input type="password" v-model="pwd" /> <button @click="login">登录</button>
+                </div>
+            `,
+            methods: {
+                login() {
+                    localStorage.setItem("user", {name: this.name, pwd: this.pwd})
+                    this.$router.push({
+                        path: '/study'
+                    })
+                }
+            }
+        }
+
+        var router = new VueRouter({
+            // mode: 'history',
+            routes: [
+                {
+                    path: '/',
+                    redirect: '/home'
+                },
+                {
+                    path: '/home',
+                    component: Home
+                },
+                {
+                    path: '/study',
+                    component: Study,
+                    meta: {
+                        auth: true
+                    }
+                },
+                {
+                    path: '/login',
+                    component: Login
+                }
+            ]
+        })
+        router.beforeEach(function(to, from, next) {
+            if (to.meta.auth) {
+                let user = localStorage.getItem("user")
+                if (!user) {
+                    next({
+                        path: '/login'
+                    })
+                    return
+                }
+            }
+            next()
+        })
+
+        new Vue({
+            el: '#app',
+            router
+        })
+
+    </script>
+</body>
+
+</html>

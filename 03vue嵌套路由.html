@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        var App = {
+            template: `
+                <div>
+                    <router-link :to="{name: 'home'}">首页</router-link>
+                    <router-link :to="{name: 'abort'}">关于</router-link>
+                    <router-view></router-view>
+                </div>
+            `
+        }
+
+        var Home = {
+            template: `<div>
+                <span>我是首页</span>
+                <router-link :to="{name: 'song'}">音乐</router-link>
+                <router-link to="/home/movie">电影</router-link>
+                <router-view></router-view>
+            </div>`
+        }
+
+        var Abort = {
+            template: `<div>关于</div>`
+        }
+
+        var Song = {
+            template: `
+                <div>音乐</div>
+            `
+        }
+
+        var Movie = {
+            template: `
+                <div>电影</div>
+            `
+        }
+
+
+        var router = new VueRouter({
+            routes: [
+                {
+                    path: '/home',
+                    name: "home",
+                    component: Home,
+                    children: [
+                        {path: 'song', component: Song, name: 'song'},
+                        {path: 'movie', component: Movie}
+                    ]
+                },
+                {
+                    path: '/abort',
+                    name: "abort",
+                    component: Abort
+                }
+            ]
+        })
+
+        new Vue({
+            el: "#app",
+            data(){
+                return {}
+            },
+            router,
+            components: {
+                App
+            },
+            template: `<App />`
+        })
+    </script>
+</body>
+</html>

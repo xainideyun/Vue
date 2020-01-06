@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+    
+        var App = {
+            template: `
+                <div>
+                    <router-link to='home'>首页</router-link>
+                    <router-link to='study'>学习</router-link>
+                    <router-view></router-view>
+                </div>
+            `
+        }
+
+        var Home = {
+            template: `
+                <div>
+                    <router-link :to="{name: 'website', params: {id: 'tengxun'}}">腾讯</router-link>
+                    <router-link :to="{name: 'website', params: {id: 'wangyi'}}">网易</router-link>
+                    <router-view></router-view>
+                </div>
+            `
+        }
+
+        var Study = {
+            template: `
+                <div>
+                    我在学习
+                </div>
+            `
+        }
+
+        var WebSite = {
+            template: `
+                <div>
+                    我是 {{name}} 官网
+                </div>
+            `,
+            data() {
+                return {
+                    name: 'null'
+                }
+            },
+            created: function() {
+                this.name = this.$route.params.id || '网易'
+            },
+            watch: {
+                "$route": function(to, from) {
+                    this.name = to.params.id
+                }
+            }
+        }
+
+        var router = new VueRouter({
+            mode: 'history',
+            routes: [
+                {
+                    path: '/home',
+                    component: Home,
+                    children: [
+                        {
+                            name: 'website',
+                            path: '/home/:id',
+                            component: WebSite
+                        }
+                    ]
+                },
+                {
+                    path: '/study',
+                    component: Study
+                }
+            ]
+        })
+
+        new Vue({
+            el: '#app',
+            router,
+            components: {
+                App
+            },
+            template: `
+                <App />
+            `
+        })
+    
+    </script>
+</body>
+</html>
