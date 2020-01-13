@@ -1,6 +1,7 @@
 import Vue from './vue.js'
 import App from './app.js'
 import {num, num1, num2, add} from './app.js'
+import './main.css'
 
 
 console.log(App);
