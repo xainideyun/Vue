@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+    <div id="app">
+        <h2>我是首页</h2>
+        <router-view></router-view>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script>
+
+        var Home = {
+            template: `
+                <div>
+                    <h3>我是用户页面 {{$route.params.id}}</h3>
+                    <router-view></router-view>
+                </div>
+            `
+        }
+
+        var Foo = {
+            template: `
+                <div>
+                    <h3>我是Foo</h3>
+                </div>
+            `,
+            created: function(){
+                console.log(this)
+            }
+        }
+
+        var Bar = {
+            template: `
+                <div>
+                    <h3>我是Bar</h3>
+                </div>
+            `,
+            created: function(){
+                console.log(this)
+            }
+        }
+
+
+        var router = new VueRouter({
+            // mode: 'history',
+            routes: [
+                {
+                    path: '/home',
+                    component: Home,
+                    children: [
+                        {
+                            path: 'foo',
+                            component: Foo
+                        },
+                        {
+                            path: 'bar',
+                            component: Bar
+                        }
+                    ]
+                }
+            ]
+        })
+
+        new Vue({
+            el: "#app",
+            router
+        })
+
+    </script>
+</body>
+</html>     
